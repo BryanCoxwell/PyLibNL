@@ -1,0 +1,26 @@
+[project]
+name = "PyLibNL"
+authors = [
+  { name="Bryan Coxwell", email="bryancoxwell@gmail.com" },
+]
+description = "A LibNL API for Python"
+readme = "README.md"
+requires-python = ">=3.11"
+dynamic = ["version"]
+license = "Apache-2.0 OR MIT"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+markers = [
+  "linuxspecific: Tests that should only be run on Linux systems"
+]
+
+[tool.hatch]
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+path = "src/pylibnl/__about__.py"
