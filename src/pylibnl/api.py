@@ -1,9 +1,8 @@
 from ctypes import CDLL
 from ctypes.util import find_library
-from typing import Callable
+from logging import getLogger
 
-import logging
-log = logging.getLogger(__name__)
+log = getLogger(__name__)
 
 LIBNAME_SHORT = "nl-3"
 LIBNAME_FULL = "libnl-3.so"
@@ -24,7 +23,13 @@ class API():
         except OSError:
             raise SystemExit("Unable to find or open libnl-3. Exiting...")
 
-    def __call__(self, func, return_type, *args):
+    def exec(
+            self, 
+            func, 
+            return_type, 
+            *args,
+            **kwargs):
+        """ Sets the return type of func and calls the function. """
         fn = self.lib[func]
         fn.restype = return_type
-        return fn(*args)
+        return fn(*args, **kwargs)

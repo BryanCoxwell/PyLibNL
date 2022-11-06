@@ -1,14 +1,7 @@
-from ctypes import Structure
-from ctypes import c_ushort
-from ctypes import c_uint
-from ctypes import c_int
-from ctypes import c_size_t
-from ctypes import c_void_p
-from ctypes import POINTER
-from ctypes import CFUNCTYPE
-from typing import NewType
-from typing import Protocol
-from enum import IntEnum
+from typing import TypeAlias, TYPE_CHECKING
+from ctypes import (
+    Structure, c_ushort, c_uint, c_int, c_size_t, c_void_p, c_wchar_p, POINTER, _Pointer, CFUNCTYPE
+)
 
 """
 This file defines libnl types as objects that inherit from the ctype library's Structure class. 
@@ -65,8 +58,16 @@ class NLMSGERR(Structure):
     """
     ...
 
-NL_RECVMSG_MSG_CB_T = CFUNCTYPE(c_int, POINTER(NL_MSG), c_void_p)
-NL_RECVMSG_ERR_CB_T = CFUNCTYPE(c_int, POINTER(SOCKADDR_NL), c_void_p)
+class NLATTR(Structure):
+    """
+    Reference:
+
+    """
+    ...
+
+
+NL_RECVMSG_MSG_CB_T = CFUNCTYPE(c_int, POINTER(NL_MSG))
+NL_RECVMSG_ERR_CB_T = CFUNCTYPE(c_int, POINTER(SOCKADDR_NL), POINTER(NLMSGERR))
 
 UCRED._fields_ = [
         ('pid', c_uint),
@@ -128,3 +129,35 @@ NLMSGERR._fields_ = [
         ('error', c_int),
         ('msg', NL_MSG),
     ]
+
+NLATTR._fields_ = [
+        ('nla_len', c_ushort),
+        ('nla_type', c_ushort),
+    ]
+
+"""
+MyPy and the ctypes lib have different ideas about what 
+pointer types should look like. This makes them both happy.
+"""
+if TYPE_CHECKING:
+    NL_SOCK_PTR: TypeAlias      = _Pointer[NL_SOCK]
+    NL_CB_PTR: TypeAlias        = _Pointer[NL_CB]
+    NL_MSG_PTR: TypeAlias       = _Pointer[NL_MSG]
+    NLMSG_HDR_PTR: TypeAlias    = _Pointer[NLMSG_HDR]
+    SOCKADDR_NL_PTR: TypeAlias  = _Pointer[SOCKADDR_NL]
+    NLMSGERR_PTR: TypeAlias     = _Pointer[NLMSGERR]
+    NLATTR_PTR: TypeAlias       = _Pointer[NLATTR]
+    UCRED_PTR: TypeAlias        = _Pointer[UCRED]
+    C_INT_PTR: TypeAlias        = _Pointer[c_int]
+    C_WCHAR_P_PTR: TypeAlias    = _Pointer[c_wchar_p]
+else:
+    NL_SOCK_PTR                 = POINTER(NL_SOCK)
+    NL_CB_PTR                   = POINTER(NL_SOCK)
+    NL_MSG_PTR                  = POINTER(NL_MSG)
+    NLMSG_HDR_PTR               = POINTER(NLMSG_HDR)
+    SOCKADDR_NL_PTR             = POINTER(SOCKADDR_NL)
+    NLMSGERR_PTR                = POINTER(NLMSGERR)
+    NLATTR_PTR                  = POINTER(NLATTR)
+    UCRED_PTR                   = POINTER(UCRED)
+    C_INT_PTR                   = POINTER(c_int)
+    C_WCHAR_P_PTR               = POINTER(c_wchar_p)
