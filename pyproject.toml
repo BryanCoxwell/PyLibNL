@@ -13,9 +13,6 @@ license = "Apache-2.0 OR MIT"
 addopts = [
     "--import-mode=importlib",
 ]
-markers = [
-  "linuxspecific: Tests that should only be run on Linux systems"
-]
 
 [tool.hatch]
 [build-system]

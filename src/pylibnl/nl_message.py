@@ -47,5 +47,6 @@ def nlmsg_next(nlh: NLMSG_HDR_PTR, remaining: C_INT_PTR) -> NLMSG_HDR_PTR:
     """ Return the next message in a message stream. """
     return libnl_api.exec('nlmsg_next', NLMSG_HDR_PTR, nlh, remaining)
 
-
-
+def nl_msg_dump(nl_msg: NL_MSG_PTR, fd: int) -> None:
+    """ Dump a message in human readable form to the file descriptor fd. """
+    libnl_api.exec('nl_msg_dump', None, nl_msg, fd)

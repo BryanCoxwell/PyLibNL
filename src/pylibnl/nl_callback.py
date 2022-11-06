@@ -2,7 +2,7 @@ from enum import IntEnum
 from typing import Callable
 from ctypes import c_uint32, c_int
 from pylibnl.api import API
-from pylibnl.nl_types import NL_CB, NL_CB_PTR, NL_MSG, NL_MSG_PTR
+from pylibnl.nl_types import NL_CB, NL_CB_PTR, NL_MSG, NL_MSG_PTR, SOCKADDR_NL_PTR, NLMSGERR_PTR
 
 libnl_api = API()
 
@@ -29,8 +29,6 @@ class NL_CB_ACTION(IntEnum):
     OK      = 0
     SKIP    = 1
     STOP    = 2
-
-
 
 def nl_cb_alloc(kind: NL_CB_KIND) -> NL_CB_PTR:
     """ Calculates the size of a netlink message based on payload length. """

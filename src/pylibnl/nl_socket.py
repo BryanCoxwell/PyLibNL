@@ -78,7 +78,8 @@ def nl_socket_modify_cb(
         sk: NL_SOCK_PTR,
         cb_type: NL_CB_TYPE, 
         cb_kind: NL_CB_KIND, 
-        fn: Callable[[NL_MSG_PTR], int]) -> int:
+        fn: Callable[[NL_MSG_PTR], int],
+        *args) -> int:
     """ 
     Modify the callback handler associated with the socket. 
     fn must be a callable that takes a pointer to a Netlink Message as an argument
