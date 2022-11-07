@@ -1,8 +1,8 @@
 import pytest
 from ctypes import POINTER
-from pylibnl.nl_callback import *
-from pylibnl.nl_socket import *
-from pylibnl.nl_types import *
+from pylibnl.core.nl_callback import *
+from pylibnl.core.nl_socket import *
+from pylibnl.core.nl_types import *
 
 
 def test_nl_socket_alloc():

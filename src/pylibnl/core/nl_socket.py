@@ -1,8 +1,8 @@
 from typing import Callable
 from ctypes import c_int, c_uint, c_uint32, c_size_t, c_void_p, c_wchar_p
-from pylibnl.nl_callback import NL_CB_KIND, NL_CB_TYPE
-from pylibnl.api import API
-from pylibnl.nl_types import (
+from pylibnl.core.nl_callback import NL_CB_KIND, NL_CB_TYPE
+from pylibnl.core.api import CoreAPI
+from pylibnl.core.nl_types import (
     SOCKADDR_NL, SOCKADDR_NL_PTR, NL_SOCK, NL_SOCK_PTR, NL_MSG, NL_MSG_PTR, NL_CB, NL_CB_PTR, 
     NLMSGERR, NLMSGERR_PTR, UCRED_PTR, C_WCHAR_P_PTR, NL_RECVMSG_MSG_CB_T, NL_RECVMSG_ERR_CB_T
 )
@@ -10,7 +10,7 @@ from logging import getLogger
 
 log = getLogger(__name__)
 
-libnl_api = API()
+libnl_api = CoreAPI()
 
 def nl_socket_alloc() -> NL_SOCK_PTR:
     """ Allocate a new Netlink socket. """

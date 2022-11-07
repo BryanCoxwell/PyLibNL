@@ -1,6 +1,6 @@
 from typing import TypeAlias, TYPE_CHECKING
 from ctypes import (
-    Structure, c_ushort, c_uint, c_int, c_size_t, c_void_p, c_wchar_p, POINTER, _Pointer, CFUNCTYPE
+    Structure, c_ushort, c_uint, c_int, c_size_t, c_void_p, c_wchar_p, POINTER, _Pointer, CFUNCTYPE, Array
 )
 
 """
@@ -61,7 +61,14 @@ class NLMSGERR(Structure):
 class NLATTR(Structure):
     """
     Reference:
+    https://github.com/thom311/libnl/blob/cbafad9ddf24caef5230fef715d34f0539603be0/include/linux-private/linux/netlink.h#L206
+    """
+    ...
 
+class NLA_POLICY(Structure):
+    """
+    Reference:
+    https://github.com/thom311/libnl/blob/cbafad9ddf24caef5230fef715d34f0539603be0/include/netlink/attr.h#L63
     """
     ...
 
@@ -135,6 +142,12 @@ NLATTR._fields_ = [
         ('nla_type', c_ushort),
     ]
 
+NLA_POLICY._fields_ = [
+        ('type', c_uint),
+        ('minlen', c_uint),
+        ('maxlen', c_uint),
+    ]
+
 """
 MyPy and the ctypes lib have different ideas about what 
 pointer types should look like. This makes them both happy.
@@ -148,6 +161,7 @@ if TYPE_CHECKING:
     NLMSGERR_PTR: TypeAlias     = _Pointer[NLMSGERR]
     NLATTR_PTR: TypeAlias       = _Pointer[NLATTR]
     UCRED_PTR: TypeAlias        = _Pointer[UCRED]
+    NLA_POLICY_PTR: TypeAlias   = _Pointer[NLA_POLICY]
     C_INT_PTR: TypeAlias        = _Pointer[c_int]
     C_WCHAR_P_PTR: TypeAlias    = _Pointer[c_wchar_p]
 else:
@@ -159,5 +173,6 @@ else:
     NLMSGERR_PTR                = POINTER(NLMSGERR)
     NLATTR_PTR                  = POINTER(NLATTR)
     UCRED_PTR                   = POINTER(UCRED)
+    NLA_POLICY_PTR              = POINTER(NLA_POLICY)
     C_INT_PTR                   = POINTER(c_int)
     C_WCHAR_P_PTR               = POINTER(c_wchar_p)

@@ -1,10 +1,10 @@
 from enum import IntEnum
 from typing import Callable
 from ctypes import c_uint32, c_int
-from pylibnl.api import API
-from pylibnl.nl_types import NL_CB, NL_CB_PTR, NL_MSG, NL_MSG_PTR, SOCKADDR_NL_PTR, NLMSGERR_PTR
+from pylibnl.core.api import CoreAPI
+from pylibnl.core.nl_types import NL_CB, NL_CB_PTR, NL_MSG, NL_MSG_PTR, SOCKADDR_NL_PTR, NLMSGERR_PTR
 
-libnl_api = API()
+libnl_api = CoreAPI()
 
 class NL_CB_KIND(IntEnum):
     DEFAULT       = 0 

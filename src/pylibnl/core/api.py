@@ -4,24 +4,19 @@ from logging import getLogger
 
 log = getLogger(__name__)
 
-LIBNAME_SHORT = "nl-3"
-LIBNAME_FULL = "libnl-3.so"
-
 class API():
-    def __init__(self):
+    def __init__(self, lib_name: str):
         """ 
         The find_library function should just return None if the shared lib
         isn't found, but sometimes it raises a FileNotFound error.
         """
         try:
-            self.libpath = find_library(LIBNAME_SHORT)
+            self.libpath = find_library(lib_name)
+            if not self.libpath:
+                raise FileNotFoundError
         except FileNotFoundError:
-            log.warning(f"Library not found by name: {self.libpath}. Attempting with filename {LIBNAME_FULL}...")
-            self.libpath = LIBNAME_FULL
-        try:
-            self.lib = CDLL(self.libpath)
-        except OSError:
-            raise SystemExit("Unable to find or open libnl-3. Exiting...")
+            raise SystemExit(f"Library not found: lib{lib_name}.so. Exiting...")
+        self.lib = CDLL(self.libpath)
 
     def exec(
             self, 
@@ -33,3 +28,11 @@ class API():
         fn = self.lib[func]
         fn.restype = return_type
         return fn(*args, **kwargs)
+
+class CoreAPI(API):
+    def __init__(self):
+        super().__init__("nl-3")
+
+class GenericAPI(API):
+    def __init__(self):
+        super().__init__("nl-genl-3")

@@ -1,11 +1,11 @@
-from pylibnl.api import API
+from pylibnl.core.api import CoreAPI
 from ctypes import c_int, c_void_p
-from pylibnl.nl_types import C_INT_PTR, NL_MSG, NL_MSG_PTR, NLMSG_HDR, NLMSG_HDR_PTR, NLATTR, NLATTR_PTR
+from pylibnl.core.nl_types import C_INT_PTR, NL_MSG, NL_MSG_PTR, NLMSG_HDR, NLMSG_HDR_PTR, NLATTR, NLATTR_PTR
 from logging import getLogger
 
 log = getLogger(__name__)
 
-libnl_api = API()
+libnl_api = CoreAPI()
 
 def nlmsg_alloc() -> NL_MSG_PTR:
     """ Allocate a new netlink message with the default maximum payload size. """
