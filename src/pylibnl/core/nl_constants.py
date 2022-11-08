@@ -1,4 +1,4 @@
-from enum import IntEnum
+from enum import IntEnum, IntFlag
 
 class NetlinkFamily(IntEnum):
     ROUTE           = 0
@@ -24,7 +24,7 @@ class NetlinkFamily(IntEnum):
     CRYPTO          = 21
     SMC             = 22
 
-class Error(IntEnum):
+class NetlinkError(IntEnum):
     SUCCESS                         = 0
     FAILURE                         = -1
     INTERRUPTED                     = -2
@@ -57,3 +57,37 @@ class Error(IntEnum):
     NO_SUCH_DEVICE                  = -29
     IMMUTABLE_ATTRIBUTE             = -30
     DUMP_INCONSISTENCY_DETECTED     = -31
+
+class NetlinkMessageFlag(IntFlag):
+    """
+    Defines the flags that can be sent with Netlink Messages.
+    https://github.com/torvalds/linux/blob/master/include/uapi/linux/netlink.h
+    """
+
+    """ Standard Flag Bits """
+    REQUEST         = 1         # Request message
+    MULTI           = 2         # Multipart message, terminated by NLMSG_DONE
+    ACK             = 4         # Request for an acknowledgement on success
+    ECHO            = 8         # Echo this request
+    DUMP_INTR       = 16        # Dump was inconsistent due to sequence change
+    DUMP_FILTERED   = 32        # Dump was filtered as requested
+
+    """ Additional flag bits for GET requests. """
+    ROOT            = 256       # Return the complete table instead of a single entry.
+    MATCH           = 512       # Return all entries matching criteria. Not implemented.
+    ATOMIC          = 1024      # Return an atomic snapshot of the table
+    DUMP            = 768       # Convenience macro for (ROOT | MATCH)
+
+    """ Additional flag bits for NEW requests. """
+    REPLACE         = 256       # Replace existing matching object
+    EXCL            = 512       # Don't replace object if it exists
+    CREATE          = 1024      # Create object if it doesn't already exist
+    APPEND          = 2048      # Add to the end of the object list
+
+    """ Additional flag bits for DELETE requests. """
+    NONREC          = 256       # Do not delete recursively
+    BULK            = 512       # Delete multiple objects
+
+    """ Additional flag bits for ACK messages. """
+    CAPPED          = 256       # Request was capped
+    ACK_TLVS        = 512       # Extended ACK TVLs were included

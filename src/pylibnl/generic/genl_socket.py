@@ -1,10 +1,14 @@
-from pylibnl.core.api import GenericAPI
+from pylibnl.executor import GenericExecutor
 from pylibnl.core.nl_types import NL_SOCK_PTR
 from pylibnl.core.nl_socket import nl_connect
 from pylibnl.core.nl_constants import NetlinkFamily
+from logging import getLogger
+
+log = getLogger(__name__)
+
 from ctypes import c_int
 
-genl_api = GenericAPI()
+genl_api = GenericExecutor()
 
 def genl_connect(sk: NL_SOCK_PTR) -> int:
     """ Connect to a Generic Netlink socket. """

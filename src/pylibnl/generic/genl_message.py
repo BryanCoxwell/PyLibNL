@@ -1,10 +1,12 @@
-from typing import Any
-from pylibnl.core.nl_types import NLMSG_HDR_PTR, NLA_POLICY_PTR, NLATTR_PTR, NL_MSG_PTR
+from pylibnl.core import NLMSG_HDR_PTR, NLA_POLICY_PTR, NLATTR_PTR, NL_MSG_PTR
 from pylibnl.generic.genl_types import GENLMSGHDR_PTR
-from pylibnl.core.api import GenericAPI
+from pylibnl.executor import GenericExecutor
 from ctypes import c_int, c_void_p, c_uint32
+from logging import getLogger
 
-genl_api = GenericAPI()
+log = getLogger(__name__)
+
+genl_api = GenericExecutor()
 
 def genlmsg_valid_hdr(
         nlh: NLMSG_HDR_PTR,
@@ -29,7 +31,7 @@ def genlmsg_validate(
 def genlmsg_parse(
         nlh: NLMSG_HDR_PTR,
         hdrlen: int,
-        tb: Any,
+        tb,
         maxtype: int,
         nla_policy: NLA_POLICY_PTR) -> int:
     """
@@ -77,7 +79,7 @@ def genlmsg_put(
         hdrlen: int,
         flags: int,
         cmd: int,
-        version: int) -> c_void_p:
+        version: int = 1) -> c_void_p:
     """ 
     Add Generic Netlink headers to a Netlink message.
     Returns a pointer to the user header.

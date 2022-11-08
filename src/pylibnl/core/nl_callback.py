@@ -1,10 +1,13 @@
 from enum import IntEnum
 from typing import Callable
 from ctypes import c_uint32, c_int
-from pylibnl.core.api import CoreAPI
-from pylibnl.core.nl_types import NL_CB, NL_CB_PTR, NL_MSG, NL_MSG_PTR, SOCKADDR_NL_PTR, NLMSGERR_PTR
+from pylibnl.executor import CoreExecutor
+from pylibnl.core.nl_types import NL_CB, NL_CB_PTR, NL_MSG, NL_MSG_PTR, SOCKADDR_NL_PTR, NLMSGERR_PTR, NL_RECVMSG_MSG_CB_T, NL_RECVMSG_ERR_CB_T
+from logging import getLogger
 
-libnl_api = CoreAPI()
+log = getLogger(__name__)
+
+libnl_api = CoreExecutor()
 
 class NL_CB_KIND(IntEnum):
     DEFAULT       = 0 
@@ -55,7 +58,8 @@ def nl_cb_set(
     TODO: This should also take an argument of type *void to be passed to fn by the caller,
     but doing so currently causes a segfault.
     """
-    return libnl_api.exec('nl_cb_set', c_int, cb, cb_type, kind, fn)
+    cfunc = NL_RECVMSG_MSG_CB_T(fn)
+    return libnl_api.exec('nl_cb_set', c_int, cb, cb_type, kind, cfunc, None)
 
 def nl_cb_err(
         cb: NL_CB_PTR, 
@@ -69,4 +73,5 @@ def nl_cb_err(
     TODO: This should also take an argument of type *void to be passed to fn by the caller,
     but doing so currently causes a segfault.
     """
-    return libnl_api.exec('nl_cb_set', c_int, cb, kind, fn)
+    cfunc = NL_RECVMSG_ERR_CB_T(fn)
+    return libnl_api.exec('nl_cb_set', c_int, cb, kind, fn, None)

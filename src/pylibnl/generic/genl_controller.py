@@ -1,8 +1,11 @@
-from pylibnl.core.nl_types import NL_SOCK_PTR
-from pylibnl.core.api import GenericAPI
+from pylibnl.core import NL_SOCK_PTR
+from pylibnl.executor import GenericExecutor
 from ctypes import c_int, c_wchar_p, create_string_buffer, byref
+from logging import getLogger
 
-genl_api = GenericAPI()
+log = getLogger(__name__)
+
+genl_api = GenericExecutor()
 
 def genl_ctrl_resolve(sk: NL_SOCK_PTR, name: str) -> int:
     """ Resolves a Generic Netlink family name to numeric identifier. """

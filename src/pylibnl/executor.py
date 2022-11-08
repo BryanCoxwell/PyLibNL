@@ -4,11 +4,16 @@ from logging import getLogger
 
 log = getLogger(__name__)
 
-class API():
+"""
+These classes are responsible for loading the required shared libraries
+and configuring and running the functions they export.
+"""
+
+class Executor():
     def __init__(self, lib_name: str):
         """ 
         The find_library function should just return None if the shared lib
-        isn't found, but sometimes it raises a FileNotFound error.
+        isn't found, but sometimes it raises FileNotFound 
         """
         try:
             self.libpath = find_library(lib_name)
@@ -29,10 +34,10 @@ class API():
         fn.restype = return_type
         return fn(*args, **kwargs)
 
-class CoreAPI(API):
+class CoreExecutor(Executor):
     def __init__(self):
         super().__init__("nl-3")
 
-class GenericAPI(API):
+class GenericExecutor(Executor):
     def __init__(self):
         super().__init__("nl-genl-3")
